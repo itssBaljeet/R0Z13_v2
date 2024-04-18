@@ -1,0 +1,32 @@
+{
+  "name": "r0z13_v2",
+  "version": "1.0.0",
+  "description": "Second iteration of r0z13 discord bot; now in the form of an electron application",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "echo \\\"Error: no test specified\\\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/itssBaljeet/R0Z13_v2.git"
+  },
+  "keywords": [
+    "discord",
+    "bot"
+  ],
+  "author": "Noah Harris",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/itssBaljeet/R0Z13_v2/issues"
+  },
+  "homepage": "https://github.com/itssBaljeet/R0Z13_v2#readme",
+  "devDependencies": {
+    "electron": "^29.2.0"
+  },
+  "dependencies": {
+    "cron": "^3.1.7",
+    "discord.js": "^14.14.1",
+    "dotenv": "^16.4.5"
+  }
+}

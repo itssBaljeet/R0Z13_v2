@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="controller.css">
+    <meta charset="UTF-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'"
+    />
+    <meta
+      http-equiv="X-Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'"
+    />
+    <title>This is the controller for Rosie!</title>
+  </head>
+  <body class="body">
+    <div class="uiDiv">
+      <h1>Hello from Electron renderer!</h1>
+      <p>👋</p>
+      <p id="info"></p>
+    </div>
+  </body>
+  <script src="./renderer.js"></script>
+</html>

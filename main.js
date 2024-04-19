@@ -4,9 +4,12 @@ const { Client, GatewayIntentBits, Guild } = require('discord.js')
 const { CronJob } = require('cron')
 require('dotenv').config()
 
+let selectedRole;
+let roleMap;
+
 const createWindow = () => {
   const win = new BrowserWindow({
-    width: 700,
+    width: 500,
     height: 650,
     x: autoUpdater,
     y: autoUpdater,
@@ -29,6 +32,7 @@ const client = new Client({
   ],
 })
 
+// Time complexity of O(n), can delete role and recreate to handle mass removal => O(1)
 async function removeRole(role) {
   let guild = client.guilds.cache.get(process.env.SERVER_ID)
   await guild.members.fetch()
@@ -36,6 +40,19 @@ async function removeRole(role) {
     console.log(`${role} removed from ${member}`)
     await member.roles.remove(role)
   })
+}
+
+// Deletes and creates role, copying everything from old role except for ID. Need a solution to use or requires manually gettiing RoleIDs
+async function recreateRole(roleId) {
+  let guild = client.guilds.cache.get(process.env.SERVER_ID)
+  await guild.roles.fetch()
+  let role = guild.roles.cache.get(roleId)
+  if (role) {
+    const deleted = await role.delete()
+    const recreated = await guild.roles.create(deleted)
+  }
+  // Update list
+  await sendRoles();
 }
 
 async function startBot() {
@@ -47,6 +64,15 @@ async function startBot() {
   }
 }
 
+// Assumes both arrays = size
+async function createMap(array1, array2) {
+  const map = new Map();
+  for (let i = 0; i < array1.length; i++) {
+    map.set(array1[i], array2[i])
+  }
+  return map;
+}
+
 async function sendRoles() {
   try {
     let guild = client.guilds.cache.get(process.env.SERVER_ID)
@@ -55,6 +81,7 @@ async function sendRoles() {
     const roleNames = guild.roles.cache.map(role => role.name);
     controllerWindow.webContents.send('role-id', roleIds)
     controllerWindow.webContents.send('role-name', roleNames)
+    roleMap = await createMap(roleNames, roleIds);
   } catch(error) {
     console.log("Error sending role: ", error)
   }
@@ -71,8 +98,8 @@ app.whenReady().then(() => {
   client.on('ready', () => {
     sendRoles();
   })
-  let removeJob = new CronJob('00 00 04 * * *', () => {
-    removeRole("1230574206312513537"); // manually input roleID
+  let removeJob = new CronJob('00 00 04 * * *', async () => {
+    await recreateRole(roleMap.get("In-Game")); // manually input role name as is in discord
   })
   removeJob.start();
 
@@ -92,8 +119,7 @@ app.whenReady().then(() => {
     // }
 
    if (newChannelId === "1230588458968289361") {
-        console.log("GiveRole")
-        let role = oldState.guild.roles.cache.get("1230574206312513537");
+        let role = oldState.guild.roles.cache.get(roleMap.get("In-Game")); // set to channel name for now; change to add user input
         txtChannel.send(`${role} role given to ${oldState.member}`);
         oldState.member.roles.add(role).catch(console.error);
     }
@@ -107,12 +133,22 @@ app.whenReady().then(() => {
     }
   })
 
-  ipcMain.on('removeRole', (event, role) => {
-    removeRole(role)
+  ipcMain.on('remove-role', (event, roleId) => {
+    removeRole(roleMap.get(selectedRole));
+  })
+
+  ipcMain.on('recreate-role', (event, roleId) => {
+    console.log("recreate")
+    recreateRole(roleMap.get(selectedRole));
   })
 
   ipcMain.on('test', (event) => {
     console.log('test successful')
+  })
+
+  ipcMain.on('selected-role', (event, role) => {
+    selectedRole = role;
+    console.log(roleMap.get(selectedRole))
   })
 })
 

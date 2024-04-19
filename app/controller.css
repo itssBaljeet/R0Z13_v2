@@ -19,21 +19,21 @@
   list-style-type: none;
 }
 #remove-role-button {
-  
   min-width: 200px;
   max-width: 300px;
   margin: auto;
+  margin-top:5px;
   width: 50%;
   padding: 5px;
 }
-#role-field {
-  border: 2px solid black;
-  margin: auto;
+#recreate-button {
+  border: 30px;
   min-width: 200px;
   max-width: 300px;
+  margin: auto;
+  margin-top: 10px;
   width: 50%;
   padding: 5px;
-  text-align: center;
 }
 .uiDiv {
   margin: auto;
@@ -51,6 +51,20 @@ h1 {
   font-size: 24pt;
   border: 5px ridge #7289da;
   text-align: center;
+}
+h2 {
+  color: #99aab5;
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif, "Open Sans", Helvetica, sans-serif;
+  font-weight: 400;
+  font-size: 24pt;
+  border: 5px ridge #7289da;
+  text-align: center;
+  margin: auto;
+  margin-bottom: 5px;
+  min-width: 200px;
+  max-width: 300px;
+  width: 50%;
+  padding: 5px;
 }
 li:hover {
   background-color: gray;

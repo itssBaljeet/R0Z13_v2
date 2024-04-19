@@ -18,14 +18,20 @@
       <h1>R0Z13 Controller v0.0.3</h1>
     </div>
     <div class="uiDiv">
+      <div>
+        <h2 id="count"> 
+          <!-- Populated by time of role recreation -->
+        </h2>
+      </div>
       <ul id="role-list">
         <!-- Populated by servers roles automatically -->
       </ul>
-      <form id="role-removal">
-        <input type="text" id="role-field" placeholder="Enter Role ID">
-        <br>
-        <button type="submit" class="blue-button" id="remove-role-button">Remove Role</button>
-      </form>
+      <div id="recreate-div">
+        <button type="button" class="blue-button" id="recreate-button">Recreate Role</button>
+      </div>
+      <div id="remove-div">
+        <button type="button" class="blue-button" id="remove-role-button">Remove Role (Legacy)</button>
+      </div>
     </div>
   </body>
   <script src="js/controller.js"></script>

@@ -11,14 +11,22 @@
       http-equiv="X-Content-Security-Policy"
       content="default-src 'self'; script-src 'self'"
     />
-    <title>This is the controller for Rosie!</title>
+    <title>R0Z13 Bot</title>
   </head>
-  <body class="body">
+  <body>
+    <div id="titleDiv">
+      <h1>R0Z13 Controller v0.0.3</h1>
+    </div>
     <div class="uiDiv">
-      <h1>Hello from Electron renderer!</h1>
-      <p>👋</p>
-      <p id="info"></p>
+      <ul id="role-list">
+        <!-- Populated by servers roles automatically -->
+      </ul>
+      <form id="role-removal">
+        <input type="text" id="role-field" placeholder="Enter Role ID">
+        <br>
+        <button type="submit" class="blue-button" id="remove-role-button">Remove Role</button>
+      </form>
     </div>
   </body>
-  <script src="./renderer.js"></script>
+  <script src="js/controller.js"></script>
 </html>

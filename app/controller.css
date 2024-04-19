@@ -1,3 +1,103 @@
-.body {
+#titleDiv {
+  background-color: #424549;
+  margin: auto;
+  min-width: 200px;
+  max-width: 300px;
+  width: 50%;
+  padding: 10px;
+}
+#role-list {
+  border: 2px solid black;
+  background-color: #99aab5;
+  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  min-height: 100px;
+  min-width: 200px;
+  max-width: 300px;
+  margin: auto;
+  width: 50%;
+  padding: 5px;
+  list-style-type: none;
+}
+#remove-role-button {
+  
+  min-width: 200px;
+  max-width: 300px;
+  margin: auto;
+  width: 50%;
+  padding: 5px;
+}
+#role-field {
+  border: 2px solid black;
+  margin: auto;
+  min-width: 200px;
+  max-width: 300px;
+  width: 50%;
+  padding: 5px;
+  text-align: center;
+}
+.uiDiv {
+  margin: auto;
+  width: auto;
+  padding: 1px;
+  text-align: center;
+}
+body {
+  background-color: #424549;
+}
+h1 {
+  color: #99aab5;
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif, "Open Sans", Helvetica, sans-serif;
+  font-weight: 400;
+  font-size: 24pt;
+  border: 5px ridge #7289da;
+  text-align: center;
+}
+li:hover {
   background-color: gray;
+  cursor: pointer;
+}
+li.selected {
+  background-color: #7289da;
+  cursor: pointer;
+}
+.white-button,
+.blue-button {
+  display: inline-block;
+  font-family: Whitney, "Open Sans", Helvetica, sans-serif;
+  font-weight: 400;
+  font-size: 11pt;
+  border-radius: 3px;
+  cursor: pointer;
+  height: 45px;
+  width: 250px;
+  box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.2);
+  margin: auto;
+}
+.blue-button {
+  background-color: #7289da;
+  border: 2px solid #7289da;
+  color: #fff;
+}
+.white-button {
+  background-color: #fff;
+  border: 2px solid #fff;
+  color: #000;
+}
+.blue-button:hover,
+.white-button:hover,
+.black-nitro-button:hover,
+.green-nitro-button:hover {
+  transform: translateY(1px);
+}
+.blue-button:active,
+.white-button:active,
+.black-nitro-button:active,
+.green-nitro-button:active {
+  transform: translateY(2px);
+}
+.blue-button,
+.white-button,
+.black-nitro-button,
+.green-nitro-button {
+  outline: transparent !important;
 }

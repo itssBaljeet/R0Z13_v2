@@ -14,10 +14,16 @@
     <title>R0Z13 Bot</title>
   </head>
   <body>
-    <div id="titleDiv">
-      <h1>R0Z13 Controller v0.0.3</h1>
+    <!-- Tab Links -->
+    <div class="tab">
+      <button class="tablinks" id='roleButton'>Roles</button>
+      <button class="tablinks" id='parisButton'>Paris</button>
+      <button class="tablinks" id='tokyoButton'>Tokyo</button>
     </div>
-    <div class="uiDiv">
+
+    <!-- Tab Content -->
+    <div id="Roles" class="tabcontent">
+      <h1>R0Z13 Controller v0.0.3</h1>
       <div>
         <h2 id="count"> 
           <!-- Populated by time of role recreation -->
@@ -27,11 +33,21 @@
         <!-- Populated by servers roles automatically -->
       </ul>
       <div id="recreate-div">
-        <button type="button" class="blue-button" id="recreate-button">Recreate Role</button>
+        <button type="button" class="blue-button" id="recreate-button">Recreate Role(No Priority Memory/Fast)</button>
       </div>
       <div id="remove-div">
-        <button type="button" class="blue-button" id="remove-role-button">Remove Role (Legacy)</button>
+        <button type="button" class="blue-button" id="remove-role-button">Remove Role (Same Role ID/Slow)</button>
       </div>
+    </div>
+
+    <div id="Paris" class="tabcontent">
+      <h3>Paris</h3>
+      <p>Paris is the capital of France.</p>
+    </div>
+    
+    <div id="Tokyo" class="tabcontent">
+      <h3>Tokyo</h3>
+      <p>Tokyo is the capital of Japan.</p>
     </div>
   </body>
   <script src="js/controller.js"></script>

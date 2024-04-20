@@ -14,6 +14,7 @@ const createWindow = () => {
     x: autoUpdater,
     y: autoUpdater,
     show: false,
+    titleBarStyle: 'default',
     webPreferences: {
         preload: path.join(__dirname, 'app/js/preload.js'),
         nodeIntegration: false
@@ -104,7 +105,7 @@ app.whenReady().then(() => {
   removeJob.start();
 
   client.on('voiceStateUpdate', (oldState, newState) => {
-    const txtChannel = client.channels.cache.get('1209245291128033340'); // manually input your own channel
+    // const txtChannel = client.channels.cache.get('1209245291128033340'); // manually input your own channel
     const newChannelId = newState.channelId;
     const oldChannelId = oldState.channelId;
 
@@ -133,17 +134,17 @@ app.whenReady().then(() => {
     }
   })
 
-  ipcMain.on('remove-role', (event, roleId) => {
+  ipcMain.on('remove-role', (event) => {
     removeRole(roleMap.get(selectedRole));
   })
 
-  ipcMain.on('recreate-role', (event, roleId) => {
+  ipcMain.on('recreate-role', (event) => {
     console.log("recreate")
     recreateRole(roleMap.get(selectedRole));
   })
 
-  ipcMain.on('test', (event) => {
-    console.log('test successful')
+  ipcMain.on('test', (event, thing) => {
+    console.log(`Test Recieved: ${thing}`)
   })
 
   ipcMain.on('selected-role', (event, role) => {

@@ -1,3 +1,46 @@
+ /* Style the tab */
+ .tab {
+  overflow: hidden;
+  border: 1px solid #282b30;
+  background-color: #36393e;
+}
+
+/* Style the buttons that are used to open the tab content */
+.tab button {
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+  color: #99aab5;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+  background-color: #4a4c51;
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+  background-color: #2e3136;
+}
+
+/* Style the tab content */
+.tabcontent {
+  display: none;
+  padding: 6px 12px;
+  border: 1px solid #282b30;
+  border-top: none;
+  animation: fadeEffect 1s; /* Fading effect takes 1 second */
+} 
+/* Go from zero to full opacity */
+@keyframes fadeEffect {
+  from {opacity: 0;}
+  to {opacity: 1;}
+}
+
 #titleDiv {
   background-color: #424549;
   margin: auto;
@@ -35,7 +78,7 @@
   width: 50%;
   padding: 5px;
 }
-.uiDiv {
+#Roles {
   margin: auto;
   width: auto;
   padding: 1px;

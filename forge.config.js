@@ -1,9 +1,14 @@
 const { FusesPlugin } = require('@electron-forge/plugin-fuses');
 const { FuseV1Options, FuseVersion } = require('@electron/fuses');
 
+
 module.exports = {
   packagerConfig: {
     asar: true,
+    extraResource: [
+      "./extraResources/config.json",
+      "./extraResources/test.txt"
+     ]
   },
   rebuildConfig: {},
   makers: [

@@ -20,17 +20,14 @@ function openTab(evt, tabName) {
 } 
 
 document.getElementById('roleButton').addEventListener('click', function(event) {
-  window.signal.send('test', 'role button clicked')
   openTab(event, 'Roles')
 })
 
-document.getElementById('parisButton').addEventListener('click', function(event) {
-  window.signal.send('test', 'paris button')
-  openTab(event, 'Paris')
+document.getElementById('queueButton').addEventListener('click', function(event) {
+  openTab(event, 'Queue')
 })
 
 document.getElementById('tokyoButton').addEventListener('click', function(event) {
-  window.signal.send('test', 'tokyo button')
   openTab(event, 'Tokyo')
 })
 
@@ -49,7 +46,7 @@ window.signal.receive('role-id', (roleIds) => {
   return;
 })
 
-
+document.getElementById("roleButton").click();
 
 window.signal.receive('role-name', (roleNames) => {
   document.getElementById('role-list').innerHTML = '';

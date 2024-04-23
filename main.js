@@ -1,11 +1,16 @@
 const { app, autoUpdater, BrowserWindow, ipcMain } = require('electron/main')
-const path = require('path')
-const { Client, GatewayIntentBits, Guild } = require('discord.js')
+const { Client, Collection, Events, GatewayIntentBits, Guild } = require('discord.js')
 const { CronJob } = require('cron')
-require('dotenv').config()
+const path = require('path')
+const fs = require('fs')
 
 let selectedRole;
 let roleMap;
+
+const configPath = path.join(__dirname, 'extraResources/config.json');
+// const configPath = path.join(process.resourcesPath, 'config.json');
+let idConfig = JSON.parse(fs.readFileSync(configPath))
+
 
 const createWindow = () => {
   const win = new BrowserWindow({
@@ -35,7 +40,7 @@ const client = new Client({
 
 // Time complexity of O(n), can delete role and recreate to handle mass removal => O(1)
 async function removeRole(role) {
-  let guild = client.guilds.cache.get(process.env.SERVER_ID)
+  let guild = client.guilds.cache.get(idConfig.SERVER_ID)
   await guild.members.fetch()
   guild.members.cache.forEach(async (member) => {
     console.log(`${role} removed from ${member}`)
@@ -43,22 +48,22 @@ async function removeRole(role) {
   })
 }
 
-// Deletes and creates role, copying everything from old role except for ID. Need a solution to use or requires manually gettiing RoleIDs
+// Deletes and creates role, copying everything from old role except for ID. Need a solution for priority
 async function recreateRole(roleId) {
-  let guild = client.guilds.cache.get(process.env.SERVER_ID)
+  let guild = client.guilds.cache.get(idConfig.SERVER_ID)
   await guild.roles.fetch()
   let role = guild.roles.cache.get(roleId)
   if (role) {
     const deleted = await role.delete()
     const recreated = await guild.roles.create(deleted)
   }
-  // Update list
+  // Update list to show priority loss
   await sendRoles();
 }
 
 async function startBot() {
   try {
-    await client.login(process.env.DISCORD_TOKEN)
+    await client.login(idConfig.DISCORD_TOKEN)
     console.log(`Logged in successfully as ${client.user.tag}!`)
   } catch(error) {
     console.log("Error logging in: ", error)
@@ -76,7 +81,7 @@ async function createMap(array1, array2) {
 
 async function sendRoles() {
   try {
-    let guild = client.guilds.cache.get(process.env.SERVER_ID)
+    let guild = client.guilds.cache.get(idConfig.SERVER_ID)
     await guild.roles.fetch()
     const roleIds = guild.roles.cache.map(role => role.id);
     const roleNames = guild.roles.cache.map(role => role.name);
@@ -100,12 +105,44 @@ app.whenReady().then(() => {
     sendRoles();
   })
   let removeJob = new CronJob('00 00 04 * * *', async () => {
-    await recreateRole(roleMap.get("In-Game")); // manually input role name as is in discord
+    await recreateRole(roleMap.get(idConfig.ROLE_NAME)); // manually input role name as is in discord
   })
   removeJob.start();
 
+  client.commands = new Collection();
+
+  const foldersPath = path.join(__dirname, 'app/commands');
+  const commandFolders = fs.readdirSync(foldersPath);
+
+  for (const folder of commandFolders) {
+    const commandsPath = path.join(foldersPath, folder);
+    const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
+    for (const file of commandFiles) {
+      const filePath = path.join(commandsPath, file);
+      const command = require(filePath);
+      // Set a new item in the Collection with the key as the command name and the value as the exported module
+      if ('data' in command && 'execute' in command) {
+        client.commands.set(command.data.name, command);
+      } else {
+        console.log(`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`);
+      }
+    }
+  }
+
+  const eventsPath = path.join(__dirname, 'app/events');
+  const eventFiles = fs.readdirSync(eventsPath).filter(file => file.endsWith('.js'));
+  
+  for (const file of eventFiles) {
+    const filePath = path.join(eventsPath, file);
+    const event = require(filePath);
+    if (event.once) {
+      client.once(event.name, (...args) => event.execute(...args));
+    } else {
+      client.on(event.name, (...args) => event.execute(...args));
+    }
+  }
+
   client.on('voiceStateUpdate', (oldState, newState) => {
-    // const txtChannel = client.channels.cache.get('1209245291128033340'); // manually input your own channel
     const newChannelId = newState.channelId;
     const oldChannelId = oldState.channelId;
 
@@ -113,18 +150,18 @@ app.whenReady().then(() => {
       return;
     }
 
-    // if (oldChannelId === "1230588458968289361") { //manually put the voice channel ID
-    //   let role = newState.guild.roles.cache.get("1230574206312513537");
+    // if (oldChannelId === idConfig.VC_ID) { //manually put the voice channel ID
+    //   let role = newState.guild.roles.cache.get(idConfig.ROLE_NAME);
     //   txtChannel.send(`${role} role removed from ${newState.member}`);
     //   newState.member.roles.remove(role).catch(console.error);
     // }
 
-   if (newChannelId === "1230588458968289361") {
-        let role = oldState.guild.roles.cache.get(roleMap.get("In-Game")); // set to channel name for now; change to add user input
-        txtChannel.send(`${role} role given to ${oldState.member}`);
+   if (newChannelId === idConfig.VC_ID) {
+        let role = oldState.guild.roles.cache.get(roleMap.get(idConfig.ROLE_NAME)); // set to channel name for now; change to add user input
         oldState.member.roles.add(role).catch(console.error);
     }
   })
+// Discord bot ends here
 
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) {

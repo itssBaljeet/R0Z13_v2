@@ -1,13 +1,13 @@
 {
   "name": "r0z13_v2",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Second iteration of r0z13 discord bot; now in the form of an electron application",
   "main": "main.js",
   "scripts": {
     "start": "electron-forge start",
     "test": "echo \\\"Error: no test specified\\\" && exit 1",
     "package": "electron-forge package",
-    "make": "electron-forge make"
+    "make": "set ELECTRON_FORGE_DEBUG=true&& electron-forge make"
   },
   "repository": {
     "type": "git",

@@ -17,13 +17,13 @@
     <!-- Tab Links -->
     <div class="tab">
       <button class="tablinks" id='roleButton'>Roles</button>
-      <button class="tablinks" id='parisButton'>Paris</button>
+      <button class="tablinks" id='queueButton'>Queue</button>
       <button class="tablinks" id='tokyoButton'>Tokyo</button>
     </div>
 
     <!-- Tab Content -->
     <div id="Roles" class="tabcontent">
-      <h1>R0Z13 Controller v0.0.3</h1>
+      <h1>R0Z13 Controller v0.1.0</h1>
       <div>
         <h2 id="count"> 
           <!-- Populated by time of role recreation -->
@@ -40,9 +40,16 @@
       </div>
     </div>
 
-    <div id="Paris" class="tabcontent">
-      <h3>Paris</h3>
-      <p>Paris is the capital of France.</p>
+    <div id="Queue" class="tabcontent">
+      <h1>R0Z13 Controller v0.1.0</h1>
+      <ul id="queue">
+        <!-- Populated by servers queue automatically -->
+      </ul>
+      <div id="ui-div">
+        <button type="button" class="blue-button" id="random-draw-button">Random Draw!</button>
+        <br>
+        <button type="button" class="blue-button" id="clear-queue-button">Clear Queue</button>
+      </div>
     </div>
     
     <div id="Tokyo" class="tabcontent">

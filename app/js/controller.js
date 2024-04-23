@@ -42,8 +42,14 @@ document.getElementById('recreate-button').addEventListener('click', function(ev
   window.signal.send('recreate-role')
 })
 
-window.signal.receive('role-id', (roleIds) => {
-  return;
+document.getElementById('clear-queue-button').addEventListener('click', function(event) {
+  event.preventDefault()
+  window.signal.send('clear-queue')
+})
+
+document.getElementById('random-draw-button').addEventListener('click', function(event) {
+  event.preventDefault()
+  window.signal.send('random-draw')
 })
 
 document.getElementById("roleButton").click();
@@ -65,4 +71,22 @@ window.signal.receive('role-name', (roleNames) => {
     })
     list.appendChild(newListItem)
   });
+})
+
+window.signal.receive('queue-name', (queueNames) => {
+  document.getElementById('queue').innerHTML = '';
+  let list = document.getElementById('queue')
+  queueNames.forEach(name => {
+    let newListItem = document.createElement('li')
+    newListItem.textContent = name
+    newListItem.addEventListener('click', function(event) {
+      let listItems = document.querySelectorAll('#queue li');
+      listItems.forEach(item => item.classList.remove('selected'));
+      this.classList.add('selected');
+      selectedQueueName = this.textContent;
+      window.signal.send('selected-queue-name', selectedQueueName)
+      newListItem.classList.add("selected")
+    })
+    list.appendChild(newListItem)
+  })
 })

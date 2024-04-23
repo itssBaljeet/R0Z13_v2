@@ -6,9 +6,10 @@ const fs = require('fs')
 
 let selectedRole;
 let roleMap;
+let queueMap;
 
-const configPath = path.join(__dirname, 'extraResources/config.json');
-// const configPath = path.join(process.resourcesPath, 'config.json');
+// const configPath = path.join(__dirname, 'extraResources/config.json');
+const configPath = path.join(process.resourcesPath, 'config.json');
 let idConfig = JSON.parse(fs.readFileSync(configPath))
 
 
@@ -19,6 +20,7 @@ const createWindow = () => {
     x: autoUpdater,
     y: autoUpdater,
     show: false,
+    autoHideMenuBar: true,
     titleBarStyle: 'default',
     webPreferences: {
         preload: path.join(__dirname, 'app/js/preload.js'),
@@ -72,6 +74,9 @@ async function startBot() {
 
 // Assumes both arrays = size
 async function createMap(array1, array2) {
+  if (array1.length !== array2.length) {
+    throw new Error("Arrays must be of the same size to create a map.");
+  }
   const map = new Map();
   for (let i = 0; i < array1.length; i++) {
     map.set(array1[i], array2[i])
@@ -79,13 +84,13 @@ async function createMap(array1, array2) {
   return map;
 }
 
+// Creates roleMap to use for lookup given a name; sends signal to update list of role names on controller
 async function sendRoles() {
   try {
     let guild = client.guilds.cache.get(idConfig.SERVER_ID)
     await guild.roles.fetch()
     const roleIds = guild.roles.cache.map(role => role.id);
     const roleNames = guild.roles.cache.map(role => role.name);
-    controllerWindow.webContents.send('role-id', roleIds)
     controllerWindow.webContents.send('role-name', roleNames)
     roleMap = await createMap(roleNames, roleIds);
   } catch(error) {
@@ -93,6 +98,87 @@ async function sendRoles() {
   }
 }
 
+async function sendQueue() {
+  try {
+    console.log("trying sendQueue...");
+    let guild = client.guilds.cache.get(idConfig.SERVER_ID);
+    const voiceChannels = guild.channels.cache.filter(ch => ch.type === 2);
+    const channel = voiceChannels.find(ch => ch.name === 'queue');
+    if (!channel.members) {
+      console.log("Voice channel 'queue' does not have member information available.");
+      return;
+    }
+
+    const queueIds = channel.members.map(member => member.user.id)
+    const queueNames = channel.members.map(member => member.user.username)
+    controllerWindow.webContents.send('queue-name', queueNames)
+    queueMap = await createMap(queueNames, queueIds);
+    console.log(queueMap);
+  } catch(error) {
+    console.error("Error sending queue: ", error);
+  }
+}
+
+async function addToChannel(userId) {
+  try {
+    let guild = client.guilds.cache.get(idConfig.SERVER_ID)
+    await guild.channels.fetch()
+    guild.members.cache.get(userId).voice.setChannel(idConfig.VC_ID)
+  } catch(error) {
+    console.error("Error sending: ", error)
+  };
+}
+
+async function randomDraw() {
+  try {
+    let guild = client.guilds.cache.get(idConfig.SERVER_ID);
+    let queueChannel = guild.channels.cache.get(idConfig.QUEUE_ID);
+
+    if (!queueChannel || queueChannel.type !== 2) {
+      console.log("Voice channel 'queue' not found or is not a voice channel.");
+      return;
+    }
+
+    // Get an array of member IDs in the queue channel
+    const memberIds = queueChannel.members.map(member => member.id);
+
+    // Randomly select a member ID
+    const randomMemberId = memberIds[Math.floor(Math.random() * memberIds.length)];
+
+    // Call addToChannel with the randomly selected member's ID
+    await addToChannel(randomMemberId);
+    console.log("Random draw completed successfully.");
+  } catch(error) {
+    console.error("There was an error drawing: ", error);
+  }
+}
+
+
+async function clearQueue() {
+  try {
+    let guild = client.guilds.cache.get(idConfig.SERVER_ID);
+    let queueChannel = guild.channels.cache.get(idConfig.QUEUE_ID);
+    
+    if (!queueChannel || queueChannel.type !== 2) {
+      console.log("Voice channel 'queue' not found or is not a voice channel.");
+      return;
+    }
+
+    queueChannel.members.forEach(async member => {
+      try {
+        // Move each member to a different voice channel or disconnect them
+        await member.voice.disconnect();
+        console.log(`User ${member.user.username} removed from the queue.`);
+      } catch (error) {
+        console.error(`Error removing user ${member.user.username} from the queue:`, error);
+      }
+    });
+  } catch(error) {
+    console.error("Error clearing queue: ", error);
+  }
+}
+
+ 
 app.whenReady().then(() => {
 
   controllerWindow = createWindow()
@@ -103,6 +189,7 @@ app.whenReady().then(() => {
   startBot();
   client.on('ready', () => {
     sendRoles();
+    sendQueue();
   })
   let removeJob = new CronJob('00 00 04 * * *', async () => {
     await recreateRole(roleMap.get(idConfig.ROLE_NAME)); // manually input role name as is in discord
@@ -120,6 +207,8 @@ app.whenReady().then(() => {
     for (const file of commandFiles) {
       const filePath = path.join(commandsPath, file);
       const command = require(filePath);
+      // Set the cliient property on the command object
+      command.client = client;
       // Set a new item in the Collection with the key as the command name and the value as the exported module
       if ('data' in command && 'execute' in command) {
         client.commands.set(command.data.name, command);
@@ -150,16 +239,22 @@ app.whenReady().then(() => {
       return;
     }
 
-    // if (oldChannelId === idConfig.VC_ID) { //manually put the voice channel ID
-    //   let role = newState.guild.roles.cache.get(idConfig.ROLE_NAME);
-    //   txtChannel.send(`${role} role removed from ${newState.member}`);
-    //   newState.member.roles.remove(role).catch(console.error);
-    // }
+    if (oldChannelId === idConfig.QUEUE_ID) {
+      sendQueue();
+    }
 
    if (newChannelId === idConfig.VC_ID) {
-        let role = oldState.guild.roles.cache.get(roleMap.get(idConfig.ROLE_NAME)); // set to channel name for now; change to add user input
+        let role = oldState.guild.roles.cache.get(roleMap.get(idConfig.ROLE_NAME));
         oldState.member.roles.add(role).catch(console.error);
+    } else if (newChannelId === idConfig.QUEUE_ID) {
+      console.log("calling sendQueue...")
+      sendQueue();
     }
+  })
+
+  client.on('join-queue', (user) => {
+    addToChannel(user.id)
+    console.log((`${user.username} joined the queue!`))
   })
 // Discord bot ends here
 
@@ -169,6 +264,14 @@ app.whenReady().then(() => {
       controllerWindow.loadFile(path.join(__dirname, "app/controller.html"))
       controllerWindow.show()
     }
+  })
+
+  ipcMain.on('clear-queue', (event) => {
+    clearQueue();
+  })
+
+  ipcMain.on('random-draw', (event) => {
+    randomDraw();
   })
 
   ipcMain.on('remove-role', (event) => {

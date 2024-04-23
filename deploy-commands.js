@@ -2,8 +2,8 @@ const { REST, Routes } = require('discord.js');
 const fs = require('fs');
 const path = require('path');
 
-const configPath = path.join(__dirname, 'extraResources/config.json');
-// const configPath = path.join(process.resourcesPath, 'config.json');
+// const configPath = path.join(__dirname, 'extraResources/config.json');
+const configPath = path.join(process.resourcesPath, 'config.json');
 let idConfig = JSON.parse(fs.readFileSync(configPath))
 
 const commands = [];

@@ -3,5 +3,6 @@
     "SERVER_ID": "",
     "CLIENT_ID": "",
     "VC_ID": "",
+    "QUEUE_ID": "",
     "ROLE_NAME": ""
 }

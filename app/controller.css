@@ -1,5 +1,8 @@
  /* Style the tab */
  .tab {
+  margin-top: -8px;
+  margin-left: -8px;
+  margin-right: -8px;
   overflow: hidden;
   border: 1px solid #282b30;
   background-color: #36393e;
@@ -95,9 +98,17 @@
 }
 #random-draw-button {
   margin-top: 10px;
+  min-width: 200px;
+  max-width: 300px;
+  width: 50%;
+  padding: 5px;
 }
 #clear-queue-button {
   margin-top: 5px;
+  min-width: 200px;
+  max-width: 300px;
+  width: 50%;
+  padding: 5px;
 }
 /* #Roles {
   margin: auto;

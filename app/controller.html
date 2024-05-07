@@ -15,15 +15,19 @@
   </head>
   <body>
     <!-- Tab Links -->
-    <div class="tab">
-      <button class="tablinks" id='roleButton'>Roles</button>
-      <button class="tablinks" id='queueButton'>Queue</button>
-      <button class="tablinks" id='tokyoButton'>Tokyo</button>
-    </div>
+    <nav class="tab">
+      <button class="tablinks" id='roleButton' aria-label="Navigate to role tab">Roles</button>
+      <button class="tablinks" id='queueButton' aria-label="Navigate to queue tab">Queue</button>
+      <button class="tablinks" id='infoButton' aria-label="Navigate to info tab">Info</button>
+    </nav>
 
-    <h1>R0Z13 Controller v0.1.0</h1>
+    <!-- <h1>R0Z13 Controller v0.1.0</h1> -->
+    <div class="logo">
+      <img src="vfx/qb-custom-small.gif" id="logo" alt="R0Z13 Logo">
+    </div>
+    
     <!-- Tab Content -->
-    <div id="Roles" class="tabcontent">
+    <section id="Roles" class="tabcontent">
       <div>
         <h2 id="count"> 
           <!-- Populated by time of role recreation -->
@@ -33,28 +37,33 @@
         <!-- Populated by servers roles automatically -->
       </ul>
       <div id="recreate-div">
-        <button type="button" class="blue-button" id="recreate-button">Recreate Role(No Priority Memory/Fast)</button>
+        <button type="button" class="blue-button" id="recreate-button" aria-label="Recreate role quickly">Recreate Role (Fast)</button>
       </div>
       <div id="remove-div">
-        <button type="button" class="blue-button" id="remove-role-button">Remove Role (Same Role ID/Slow)</button>
+        <button type="button" class="blue-button" id="remove-role-button" aria-label="Remove role slower">Remove Role (Slow)</button>
       </div>
-    </div>
+    </section>
 
-    <div id="Queue" class="tabcontent">
+    <section id="Queue" class="tabcontent">
+      <h2>Queue List</h2>
       <ul id="queue">
         <!-- Populated by servers queue automatically -->
       </ul>
       <div id="ui-div">
-        <button type="button" class="blue-button" id="random-draw-button">Random Draw!</button>
+        <button type="button" class="blue-button" id="random-draw-button" aria-label="Draw randomly from queue">Random Draw!</button>
         <br>
-        <button type="button" class="white-button" id="clear-queue-button">Clear Queue</button>
+        <button type="button" class="white-button" id="clear-queue-button" aria-label="Clear queue">Clear Queue</button>
       </div>
-    </div>
+    </section>
     
-    <div id="Tokyo" class="tabcontent">
-      <h3>Tokyo</h3>
-      <p>Tokyo is the capital of Japan.</p>
-    </div>
+    <section id="Info" class="tabcontent">
+      <h3>Info</h3>
+      <p>Hello! This is R0Z13 v0.1.1!</p>
+      <ol>
+        <li>Recreate Roles is faster since it deletes and recreates the role. However, it doesn't save the role's heirarchy. Also new role has a newly generated ID.</li>
+        <li>Remove Roles is slower because it iterates through the member list one at a time, removing the role. It goes slower the larger your server gets.</li>
+      </ol>
+    </section>
   </body>
   <script src="js/controller.js"></script>
 </html>

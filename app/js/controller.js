@@ -27,8 +27,8 @@ document.getElementById('queueButton').addEventListener('click', function(event)
   openTab(event, 'Queue')
 })
 
-document.getElementById('tokyoButton').addEventListener('click', function(event) {
-  openTab(event, 'Tokyo')
+document.getElementById('infoButton').addEventListener('click', function(event) {
+  openTab(event, 'Info')
 })
 
 
@@ -68,6 +68,7 @@ window.signal.receive('role-name', (roleNames) => {
       selectedRole = this.textContent;
       window.signal.send('selected-role', selectedRole)
       newListItem.classList.add("selected")
+      console.log(selectedRole)
     })
     list.appendChild(newListItem)
   });
@@ -86,6 +87,7 @@ window.signal.receive('queue-name', (queueNames) => {
       selectedQueueName = this.textContent;
       window.signal.send('selected-queue-name', selectedQueueName)
       newListItem.classList.add("selected")
+      console.log(selectedQueueName)
     })
     list.appendChild(newListItem)
   })

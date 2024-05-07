@@ -4,5 +4,6 @@
     "CLIENT_ID": "",
     "VC_ID": "",
     "QUEUE_ID": "",
+    "CHANNEL_NAME": "",
     "ROLE_NAME": ""
 }

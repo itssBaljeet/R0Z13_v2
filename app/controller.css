@@ -110,6 +110,17 @@
   width: 50%;
   padding: 5px;
 }
+.logo {
+  margin: auto;
+  margin-top: 25px;
+  margin-bottom: 25px;
+  text-align: center;
+  outline: transparent !important;
+}
+#logo {
+  /* border: ridge 3px #7289da; */
+  outline: transparent !important;
+}
 /* #Roles {
   margin: auto;
   width: auto;
@@ -135,11 +146,16 @@ h2 {
   border: 5px ridge #7289da;
   text-align: center;
   margin: auto;
+  margin-top: -15px;
   margin-bottom: 5px;
   min-width: 200px;
   max-width: 300px;
   width: 50%;
   padding: 5px;
+}
+#Info {
+  color: #99aab5;
+  margin: auto;
 }
 li:hover {
   background-color: gray;

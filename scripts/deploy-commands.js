@@ -2,13 +2,13 @@ const { REST, Routes } = require('discord.js');
 const fs = require('fs');
 const path = require('path');
 
-// const configPath = path.join(__dirname, 'extraResources/config.json');
-const configPath = path.join(process.resourcesPath, 'config.json');
+const configPath = path.join(__dirname, '../extraResources/config.json');
+// const configPath = path.join(process.resourcesPath, 'config.json');
 let idConfig = JSON.parse(fs.readFileSync(configPath))
 
 const commands = [];
 // Grab all the command folders from the commands directory you created earlier
-const foldersPath = path.join(__dirname, 'src/commands');
+const foldersPath = path.join(__dirname, '../src/discord/commands');
 const commandFolders = fs.readdirSync(foldersPath);
 
 for (const folder of commandFolders) {

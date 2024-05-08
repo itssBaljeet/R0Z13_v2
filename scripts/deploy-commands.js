@@ -8,7 +8,7 @@ let idConfig = JSON.parse(fs.readFileSync(configPath))
 
 const commands = [];
 // Grab all the command folders from the commands directory you created earlier
-const foldersPath = path.join(__dirname, 'app/commands');
+const foldersPath = path.join(__dirname, 'src/commands');
 const commandFolders = fs.readdirSync(foldersPath);
 
 for (const folder of commandFolders) {

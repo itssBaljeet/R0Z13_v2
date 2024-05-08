@@ -2,7 +2,7 @@
   "name": "r0z13_v2",
   "version": "0.1.0",
   "description": "Second iteration of r0z13 discord bot; now in the form of an electron application",
-  "main": "main.js",
+  "main": "src/main/index.js",
   "scripts": {
     "start": "electron-forge start",
     "test": "echo \\\"Error: no test specified\\\" && exit 1",

@@ -2,8 +2,8 @@ const bot = require('./bot')
 const path = require('path')
 const fs = require('fs')
 
-const configPath = path.join(__dirname, '../../extraResources/config.json');
-// const configPath = path.join(process.resourcesPath, 'config.json');
+// const configPath = path.join(__dirname, '../../extraResources/config.json');
+const configPath = path.join(process.resourcesPath, 'config.json');
 let idConfig = JSON.parse(fs.readFileSync(configPath))
 
 async function sendQueue(webContents) {

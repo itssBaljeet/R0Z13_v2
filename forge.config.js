@@ -1,10 +1,11 @@
 const { FusesPlugin } = require('@electron-forge/plugin-fuses');
 const { FuseV1Options, FuseVersion } = require('@electron/fuses');
-
+const path = require('path')
 
 module.exports = {
   packagerConfig: {
     asar: true,
+    icon: path.join(__dirname, 'assets/icons/qb_logo_gif_small_Ewq_icon.ico'),
     extraResource: [
       "./extraResources/config.json",
       "./extraResources/test.txt"
